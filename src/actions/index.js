@@ -37,15 +37,9 @@ export function pushAPI(field1,field2){
 }
 
 export function removeAPI(removeKey){
-  return dispatch => {
-    rootRef.once('value', snap=> {
-      let snapshot = snap.val();
-      let newArray = Object.values(snapshot);
-      newArray.filter(value=> {
-        if(value.key == removeKey){
-          roofRef.remove();
-        }
-      })
-    })
-  }
+  let newkey = removeKey.key
+  return dispatch => rootRef.orderByChild('key').equalTo(newkey).once('child_added')
+  .then(snap=> {
+    snap.ref.remove();
+  })
 }

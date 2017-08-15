@@ -6,5 +6,5 @@ switch(action.type){
   return action.payload
   default:
   return state;
-}    
+}
 }

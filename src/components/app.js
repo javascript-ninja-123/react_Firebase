@@ -11,21 +11,23 @@ import {bindActionCreators} from 'redux';
      this.renderingDom = this.renderingDom.bind(this);
 
    }
-   componentDidMount() {
-     this.props.fetchAPI()
+   componentWillMount() {
+    this.props.fetchAPI()
    }
-   renderingDom(value){
+   renderingDom(){
+    return Object.values(this.props.users).map(value => {
       return (
         <div key={value.key}>
           <h3>{value.username}</h3>
           <p>{value.text}</p>
-        <button onClick={() => {this.removeText(value.key)}}>Remove</button>
+        <button onClick={this.removeText.bind(this,value)}>Remove</button>
         </div>
       )
+    })
    }
-   removeText(key){
-     console.log('working')
-     this.props.removeAPI(key)
+   removeText(value){
+     console.log(value)
+     this.props.removeAPI(value)
    }
    handleChange(e){
      this.setState({[e.target.name]:e.target.value})
@@ -37,6 +39,9 @@ import {bindActionCreators} from 'redux';
    }
 
   render() {
+    if(!this.props.users){
+      return <div>Loading...</div>
+    }
     return (
       <div>
         <form onSubmit={this.onSubmit}>
@@ -55,7 +60,7 @@ import {bindActionCreators} from 'redux';
         <button type='submit'>Click me</button>
       </form>
         <div>
-          {Object.values(this.props.users).map(this.renderingDom)}
+          {this.renderingDom()}
         </div>
       </div>
     );
